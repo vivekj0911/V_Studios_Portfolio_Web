@@ -1,7 +1,7 @@
 // backend/middleware/auth.js
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
-const verifyAdmin = (req, res, next) => {
+export const verifyAdmin = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1]; // "Bearer <token>"
   if (!token) return res.status(401).json({ message: "No token provided" });
 
@@ -16,4 +16,4 @@ const verifyAdmin = (req, res, next) => {
   }
 };
 
-module.exports = verifyAdmin;
+// module.exports = verifyAdmin;

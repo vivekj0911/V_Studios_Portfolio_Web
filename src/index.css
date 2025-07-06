@@ -1,24 +1,20 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
-   --color-base-bg: #f9f5f1;
-  --color-body-text: #3e2d21;
-  --color-heading: #5c4433;
-  --color-almond: #ede0d4;
-  --color-dun: #e6ccb2;
-  --color-tan: #ddb892;
-  --color-chamoisee: #b08968;
-  --color-coffee: #7f5539;
-  --color-raw-umber: #9c6644;
-  --color-dark-bg: #1f1f1f;
-  --color-dark-text: #f3f3f3;
+  /* Color Palette: Light Theme Only */
+  --color-base-bg: #FEFAF6;
+  --color-body-text: #102C57;
+  --color-heading: #102C57;
+  --color-beige: #EADBC8;
+  --color-tan: #DAC0A3;
+  --color-accent: #102C57;
 
+  /* Font stack */
   --font-heading: "Lora", ui-serif, Georgia, serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Animation */
 @layer utilities {
   .animate-fadeIn {
     animation: fadeIn 1s ease-out both;

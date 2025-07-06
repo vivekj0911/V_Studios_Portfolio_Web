@@ -2,7 +2,7 @@
 import express from "express";
 import multer from "multer";
 import { uploadMedia } from "../controllers/mediaController.js";
-import verifyAdmin from "../middleware/auth.js";
+import { verifyAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" }); // saves to disk temporarily
