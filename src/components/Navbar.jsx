@@ -1,147 +1,93 @@
-import { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+"use client"
 
-// Framer Motion animation variants
-const navbarVariants = {
-  hidden: { y: -50, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
+import { useState, useEffect } from "react"
+import { Camera, Menu, X } from "lucide-react"
 
-const navItemVariants = {
-  hidden: { opacity: 0, y: -10 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: 0.3 + i * 0.1,
-      duration: 0.4,
-      ease: "easeOut",
-    },
-  }),
-};
+const Navbar = ({ navigateTo }) => {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-const mobileMenuVariants = {
-  hidden: { height: 0, opacity: 0 },
-  visible: {
-    height: "auto",
-    opacity: 1,
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-  exit: { height: 0, opacity: 0, transition: { duration: 0.2 } },
-};
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-const navLinks = [
-  { name: "Home", path: "/" },
-  { name: "Gallery", path: "/#gallery" },
-  { name: "About", path: "/#about" },
-  { name: "Contact", path: "/#contact" },
-];
+  const navLinks = [
+    { href: "home", label: "Home" },
+    { href: "gallery", label: "Gallery" },
+    { href: "about", label: "About" },
+    { href: "contact", label: "Contact" },
+  ]
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+    setIsMobileMenuOpen(false)
+  }
 
   return (
-    <motion.header
-      variants={navbarVariants}
-      initial="hidden"
-      animate="visible"
-      className="fixed top-0 w-full z-50 bg-beige/90 backdrop-blur-md shadow-sm transition-colors duration-300"
-      aria-label="Main navigation"
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? "bg-white/95 backdrop-blur-sm shadow-sm" : "bg-transparent"
+      }`}
     >
-      <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Logo */}
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-3xl font-heading text-heading"
-          aria-label="Vidhi Digitals homepage"
-        >
-          <img
-            src="/camera.png"
-            alt="Vidhi Digitals Logo"
-            className="h-10 w-auto object-contain transition-transform duration-300 ease-in-out hover:scale-110 hover:rotate-3"
-            loading="eager"
-            width={40}
-            height={40}
-          />
-          <span className="tracking-tight">Vidhi Digitals</span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8 font-body text-lg text-body-text">
-          {navLinks.map(({ name, path }, index) => (
-            <motion.div
-              key={name}
-              custom={index}
-              initial="hidden"
-              animate="visible"
-              variants={navItemVariants}
-            >
-              <NavLink
-                to={path}
-                className={({ isActive }) =>
-                  `relative group transition duration-300 pb-1 ${isActive
-                    ? "text-heading font-semibold"
-                    : "text-body-text hover:text-accent"
-                  }`
-                }
-              >
-                {name}
-                <span className="absolute left-0 -bottom-0 w-full h-1 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-              </NavLink>
-            </motion.div>
-          ))}
-        </nav>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden text-3xl text-body-text focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-          aria-controls="mobile-menu"
-          aria-expanded={isOpen}
-        >
-          ☰
-        </button>
-      </div>
-
-      {/* Mobile Dropdown */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.nav
-            id="mobile-menu"
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={mobileMenuVariants}
-            className="md:hidden bg-beige px-4 pb-4 pt-2 space-y-2 overflow-hidden"
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div
+            className="flex items-center space-x-2 text-[#102C57] hover:opacity-80 transition-opacity cursor-pointer"
+            onClick={() => scrollToSection("home")}
           >
-            {navLinks.map(({ name, path }, index) => (
-              <motion.div
-                key={name}
-                custom={index}
-                initial="hidden"
-                animate="visible"
-                variants={navItemVariants}
-              >
-                <NavLink
-                  to={path}
-                  onClick={() => setIsOpen(false)}
-                  className="block py-2 font-medium text-lg text-body-text hover:text-accent relative group transition"
-                >
-                  {name}
-                  <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+            <Camera className="h-6 w-6" />
+            <span className="font-semibold text-lg">Vidhi Digitals</span>
+          </div>
 
-                </NavLink>
-              </motion.div>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-8">
+            {navLinks.map((link) => (
+              <button
+                key={link.href}
+                onClick={() => scrollToSection(link.href)}
+                className="text-[#102C57] hover:text-[#102C57]/70 transition-colors font-medium"
+              >
+                {link.label}
+              </button>
             ))}
-          </motion.nav>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-[#102C57] hover:opacity-70 transition-opacity"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-[#EADBC8]">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {navLinks.map((link) => (
+                <button
+                  key={link.href}
+                  onClick={() => scrollToSection(link.href)}
+                  className="block w-full text-left px-3 py-2 text-[#102C57] hover:bg-[#EADBC8]/30 rounded-md transition-colors"
+                >
+                  {link.label}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
-      </AnimatePresence>
-    </motion.header>
-  );
+      </div>
+    </nav>
+  )
 }
+
+export default Navbar

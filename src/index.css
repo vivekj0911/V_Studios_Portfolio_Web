@@ -14,20 +14,27 @@
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Animation */
-@layer utilities {
-  .animate-fadeIn {
-    animation: fadeIn 1s ease-out both;
-  }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+/* Hero Divider */
+.custom-shape-divider-bottom-hero {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+  z-index: -1; /* Keep it behind text */
 }
+
+.custom-shape-divider-bottom-hero svg {
+  position: relative;
+  display: block;
+  width: calc(130% + 1.3px);
+  height: 140px;
+}
+
+.custom-shape-divider-bottom-hero .shape-fill {
+  fill: #FEFAF6; /* Matches --color-base-bg */
+}
+

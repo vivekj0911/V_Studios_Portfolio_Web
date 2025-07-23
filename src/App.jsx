@@ -1,31 +1,27 @@
 import { Routes, Route } from 'react-router-dom'
+import Layout from './components/Layout'
 import Home from './pages/Home'
-import Gallery from './pages/Gallery'
-import About from './pages/About'
-import Contact from './pages/Contact'
+import GalleryDetailPage from './pages/GalleryDetailPage'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
-import Layout from './components/Layout'
-
+import AdminUpload from './pages/admin/AdminUpload'
+import AdminManage from './pages/admin/AdminManage'
 
 function App() {
-
-
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Route>
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      </Routes>
+    <Routes>
+      {/* Public-facing layout */}
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="gallery/:category" element={<GalleryDetailPage />} />
+      </Route>
 
-   
-    </>
+      {/* Admin pages */}
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/admin/upload" element={<AdminUpload />} />
+      <Route path="/admin/manage" element={<AdminManage />} />
+    </Routes>
   )
 }
 

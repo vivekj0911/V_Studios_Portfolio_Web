@@ -27,9 +27,27 @@ export const uploadMedia = async (req, res) => {
     // Clean up local file (Multer saves to /tmp or disk)
     fs.unlinkSync(file.path);
 
-    res.status(201).json({ message: "Uploaded successfully", media });
+    res.status(201).json({
+      message: "Uploaded successfully",
+      media: {
+        id: media._id,
+        title: media.title,
+        url: media.url,
+        type: media.type,
+        category: media.category,
+      },
+    });
   } catch (err) {
-    console.error("Upload error:", err);
-    res.status(500).json({ message: "Upload failed" });
+    console.error("Upload error:", err.response?.data || err.message);
+    res.status(500).json({ message: "Upload failed", error: err.message });
+  }
+};
+
+export const getAllMedia = async (req, res) => {
+  try {
+    const mediaItems = await Media.find().sort({ uploadedAt: -1 });
+    res.status(200).json(mediaItems);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch media", error: err.message });
   }
 };

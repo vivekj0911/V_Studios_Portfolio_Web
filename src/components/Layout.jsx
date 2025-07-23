@@ -1,15 +1,15 @@
-// src/components/Layout.jsx
-import Navbar from "./Navbar"
-import { Outlet } from "react-router-dom"
+import { Outlet } from 'react-router-dom'
+import Navbar from './Navbar'
+import Footer from './Footer'
 
-export default function Layout() {
+function Layout() {
   return (
-    <>
+    <div className="min-h-screen bg-[#FEFAF6]">
       <Navbar />
-      <main className="pt-15 min-h-screen bg-#fff text-">
-        <Outlet />
-      </main>
-      {/* Footer can be added here later */}
-    </>
+      <Outlet />
+      <Footer />
+    </div>
   )
 }
+
+export default Layout
