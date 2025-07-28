@@ -6,20 +6,22 @@ import fs from "fs";
 export const uploadMedia = async (req, res) => {
   try {
     const file = req.file;
-    const { title, category } = req.body;
+    const { title, category, description } = req.body;
 
     if (!file) return res.status(400).json({ message: "No file uploaded" });
 
     const result = await cloudinary.uploader.upload(file.path, {
-      resource_type: "auto", // automatically detect image or video
+      resource_type: "auto",
       folder: "portfolio",
     });
 
     const media = new Media({
       title,
       url: result.secure_url,
-      type: result.resource_type, // "image" or "video"
+      type: result.resource_type,
       category,
+      description,
+      public_id: result.public_id // ✅ Save this!
     });
 
     await media.save();
@@ -35,6 +37,9 @@ export const uploadMedia = async (req, res) => {
         url: media.url,
         type: media.type,
         category: media.category,
+        description: media.description,
+        uploadedAt: media.uploadedAt,
+        views: media.views,
       },
     });
   } catch (err) {
@@ -49,5 +54,76 @@ export const getAllMedia = async (req, res) => {
     res.status(200).json(mediaItems);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch media", error: err.message });
+  }
+};
+
+export const deleteMedia = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const media = await Media.findById(id);
+    if (!media) {
+      return res.status(404).json({ message: "Media not found" });
+    }
+
+    // ✅ Delete from Cloudinary first
+    await cloudinary.uploader.destroy(media.public_id, {
+      resource_type: media.type === "video" ? "video" : "image"
+    });
+
+    // ✅ Then delete from MongoDB
+    await Media.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Media deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete media", error: err.message });
+  }
+};
+
+export const incrementViews = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const media = await Media.findById(id);
+    if (!media) {
+      return res.status(404).json({ message: "Media not found" });
+    }
+    media.views += 1;
+    await media.save();
+    res.status(200).json({ message: "View incremented" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to increment view", error: err.message });
+  }
+};
+
+export const getMediaStats = async (req, res) => {
+  try {
+    const totalPhotos = await Media.countDocuments({ type: "image" });
+    const totalCategories = await Media.distinct("category");
+    const recentUploads = await Media.countDocuments({
+      uploadedAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }, // past 7 days
+    });
+    const monthlyViews = await Media.aggregate([
+      {
+        $match: {
+          uploadedAt: {
+            $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          views: { $sum: "$views" }, // assuming each media has a `views` field
+        },
+      },
+    ]);
+
+    res.json({
+      totalPhotos,
+      totalCategories: totalCategories.length,
+      recentUploads,
+      monthlyViews: monthlyViews[0]?.views || 0,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch stats", error: err.message });
   }
 };

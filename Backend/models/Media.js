@@ -6,6 +6,9 @@ const mediaSchema = new mongoose.Schema({
   url: { type: String, required: true },
   type: { type: String, enum: ["image", "video"], required: true },
   category: { type: String },
+  description: { type: String }, // from upload form
+  views: { type: Number, default: 0 }, // used in AdminManage
+  public_id: { type: String }, 
   uploadedAt: { type: Date, default: Date.now },
 });
 

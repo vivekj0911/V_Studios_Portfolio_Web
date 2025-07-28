@@ -1,26 +1,80 @@
-import AdminLayout from "../../components/AdminLayout"
+import { useEffect, useState } from "react"
 import { Camera, Upload, ImageIcon, BarChart3 } from "lucide-react"
 
-const stats = [
-  { label: "Total Photos", value: "1,247", icon: ImageIcon, color: "bg-blue-500" },
-  { label: "Categories", value: "8", icon: Camera, color: "bg-green-500" },
-  { label: "Recent Uploads", value: "23", icon: Upload, color: "bg-purple-500" },
-  { label: "Views This Month", value: "5,432", icon: BarChart3, color: "bg-orange-500" },
-]
+const AdminDashboard = () => {
+  const [stats, setStats] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-const AdminDashboard = ({ navigateTo }) => {
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/media/stats", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        })
+        const data = await res.json()
+        console.log("Fetched stats:", data)
+        setStats([
+          {
+            label: "Total Photos",
+            value: data.totalPhotos,
+            icon: ImageIcon,
+            color: "bg-blue-500",
+          },
+          {
+            label: "Categories",
+            value: data.totalCategories,
+            icon: Camera,
+            color: "bg-green-500",
+          },
+          {
+            label: "Recent Uploads",
+            value: data.recentUploads,
+            icon: Upload,
+            color: "bg-purple-500",
+          },
+          {
+            label: "Views This Month",
+            value: data.monthlyViews,
+            icon: BarChart3,
+            color: "bg-orange-500",
+          },
+        ])
+      } catch (err) {
+        console.error("Failed to fetch dashboard stats:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStats()
+  }, [])
+
   return (
-    <AdminLayout navigateTo={navigateTo}>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-[#102C57]">Dashboard</h1>
-          <p className="text-[#102C57]/60 mt-2">Welcome back! Here's an overview of your photography portfolio.</p>
-        </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-[#102C57]">Dashboard</h1>
+        <p className="text-[#102C57]/60 mt-2">
+          Welcome back! Here's an overview of your photography portfolio.
+        </p>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat) => (
-            <div key={stat.label} className="bg-white rounded-xl shadow-sm p-6 border border-[#EADBC8]/30">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {loading ? (
+          Array.from({ length: 4 }).map((_, idx) => (
+            <div
+              key={idx}
+              className="bg-white animate-pulse rounded-xl shadow-sm p-6 border border-[#EADBC8]/30 h-[100px]"
+            />
+          ))
+        ) : (
+          stats?.map((stat) => (
+            <div
+              key={stat.label}
+              className="bg-white rounded-xl shadow-sm p-6 border border-[#EADBC8]/30"
+            >
               <div className="flex items-center">
                 <div className={`p-3 rounded-lg ${stat.color}`}>
                   <stat.icon className="h-6 w-6 text-white" />
@@ -31,36 +85,20 @@ const AdminDashboard = ({ navigateTo }) => {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          ))
+        )}
+      </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-xl shadow-sm border border-[#EADBC8]/30">
-          <div className="p-6 border-b border-[#EADBC8]/30">
-            <h2 className="text-xl font-semibold text-[#102C57]">Recent Activity</h2>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-[#102C57]/80">Uploaded 5 new wedding photos to "Priya & Rohit" collection</span>
-                <span className="text-sm text-[#102C57]/50">2 hours ago</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-[#102C57]/80">Created new category "Corporate Events"</span>
-                <span className="text-sm text-[#102C57]/50">1 day ago</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span className="text-[#102C57]/80">Updated portfolio description</span>
-                <span className="text-sm text-[#102C57]/50">3 days ago</span>
-              </div>
-            </div>
-          </div>
+      {/* Placeholder for Recent Activity (optional future integration) */}
+      <div className="bg-white rounded-xl shadow-sm border border-[#EADBC8]/30">
+        <div className="p-6 border-b border-[#EADBC8]/30">
+          <h2 className="text-xl font-semibold text-[#102C57]">Recent Activity</h2>
+        </div>
+        <div className="p-6 text-[#102C57]/60">
+          Coming soon: Upload logs, category edits, and view analytics.
         </div>
       </div>
-    </AdminLayout>
+    </div>
   )
 }
 

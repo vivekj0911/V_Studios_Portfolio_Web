@@ -1,16 +1,36 @@
-"use client"
+// src/components/admin/AdminLayout.jsx
 
 import { useState } from "react"
-import { Camera, LayoutDashboard, Upload, ImageIcon, LogOut, Menu, X } from "lucide-react"
+import { Outlet, useNavigate } from "react-router-dom"
+import {
+  Camera,
+  LayoutDashboard,
+  Upload,
+  ImageIcon,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react"
 
 const navigation = [
-  { name: "Dashboard", page: "admin-dashboard", icon: LayoutDashboard },
-  { name: "Upload Media", page: "admin-upload", icon: Upload },
-  { name: "Manage Media", page: "admin-manage", icon: ImageIcon },
+  { name: "Dashboard", page: "dashboard", icon: LayoutDashboard },
+  { name: "Upload Media", page: "upload", icon: Upload },
+  { name: "Manage Media", page: "manage", icon: ImageIcon },
 ]
 
-const AdminLayout = ({ children, navigateTo }) => {
+const AdminLayout = () => {
+  const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const handleNavigate = (page) => {
+    navigate(`/admin/${page}`)
+    setSidebarOpen(false)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken")
+    navigate("/admin/login")
+  }
 
   return (
     <div className="min-h-screen bg-[#FEFAF6]">
@@ -31,10 +51,7 @@ const AdminLayout = ({ children, navigateTo }) => {
             {navigation.map((item) => (
               <button
                 key={item.name}
-                onClick={() => {
-                  navigateTo(item.page)
-                  setSidebarOpen(false)
-                }}
+                onClick={() => handleNavigate(item.page)}
                 className="flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left text-[#102C57]/60 hover:bg-[#EADBC8]/30"
               >
                 <item.icon className="h-5 w-5" />
@@ -42,7 +59,7 @@ const AdminLayout = ({ children, navigateTo }) => {
               </button>
             ))}
             <button
-              onClick={() => navigateTo("admin-login")}
+              onClick={handleLogout}
               className="flex items-center space-x-3 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 w-full text-left"
             >
               <LogOut className="h-5 w-5" />
@@ -64,7 +81,7 @@ const AdminLayout = ({ children, navigateTo }) => {
           {navigation.map((item) => (
             <button
               key={item.name}
-              onClick={() => navigateTo(item.page)}
+              onClick={() => handleNavigate(item.page)}
               className="flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors w-full text-left text-[#102C57]/60 hover:bg-[#EADBC8]/30"
             >
               <item.icon className="h-5 w-5" />
@@ -72,7 +89,7 @@ const AdminLayout = ({ children, navigateTo }) => {
             </button>
           ))}
           <button
-            onClick={() => navigateTo("admin-login")}
+            onClick={handleLogout}
             className="flex items-center space-x-3 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 w-full text-left mt-8"
           >
             <LogOut className="h-5 w-5" />
@@ -86,17 +103,22 @@ const AdminLayout = ({ children, navigateTo }) => {
         {/* Top bar */}
         <div className="bg-white shadow-sm border-b border-[#EADBC8]/30 px-4 py-4 lg:px-8">
           <div className="flex items-center justify-between">
-            <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-[#102C57]/60 hover:text-[#102C57]">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden text-[#102C57]/60 hover:text-[#102C57]"
+            >
               <Menu className="h-6 w-6" />
             </button>
             <div className="flex items-center space-x-4">
-              <span className="text-[#102C57]/60">Welcome back, Arjun</span>
+              <span className="text-[#102C57]/60">Welcome back, Pramod</span>
             </div>
           </div>
         </div>
 
         {/* Page content */}
-        <div className="p-4 lg:p-8">{children}</div>
+        <div className="p-4 lg:p-8">
+          <Outlet />
+        </div>
       </div>
     </div>
   )

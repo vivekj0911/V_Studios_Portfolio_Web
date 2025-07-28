@@ -1,32 +1,57 @@
-"use client"
 
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Camera, Eye, EyeOff } from "lucide-react"
 
-const AdminLogin = ({ navigateTo }) => {
+const AdminLogin = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate login
-    setTimeout(() => {
+    setError(null)
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.email,
+          password: formData.password,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed")
+      }
+
+      // ✅ Make sure this matches what ProtectedRoute expects
+      localStorage.setItem("adminToken", data.token)
+
+      // 🔁 Redirect to dashboard
+      navigate("/admin/dashboard")
+    } catch (err) {
+      setError(err.message)
+    } finally {
       setIsLoading(false)
-      navigateTo("admin-dashboard")
-    }, 1000)
+    }
   }
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   return (
@@ -42,6 +67,10 @@ const AdminLogin = ({ navigateTo }) => {
 
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <p className="text-red-500 text-sm text-center font-medium">{error}</p>
+            )}
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-[#102C57] mb-2">
                 Email Address
@@ -70,7 +99,7 @@ const AdminLogin = ({ navigateTo }) => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-[#EADBC8] rounded-lg focus:ring-2 focus:ring-[#DAC0A3] focus:border-transparent transition-colors pr-12"
+                  className="w-full px-4 py-3 border border-[#EADBC8] rounded-lg focus:ring-2 focus:ring-[#DAC0A3] focus:border-transparent pr-12 transition-colors"
                   placeholder="Enter your password"
                 />
                 <button
