@@ -1,76 +1,55 @@
-"use client"
-
 import { X, ChevronLeft, ChevronRight } from "lucide-react"
 
 const Lightbox = ({ images, currentIndex, onClose, onNext, onPrev }) => {
-  const currentImage = images[currentIndex]
+  const item = images[currentIndex]
 
-  const handleContextMenu = (e) => {
-    e.preventDefault()
-  }
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Escape") onClose()
-    if (e.key === "ArrowRight") onNext()
-    if (e.key === "ArrowLeft") onPrev()
-  }
+  if (!item) return null
 
   return (
-    <div
-      className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
-      onContextMenu={handleContextMenu}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-    >
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+        className="absolute top-4 right-4 text-white text-3xl z-50"
+        aria-label="Close"
       >
-        <X className="h-6 w-6 text-white" />
+        <X />
       </button>
 
-      {/* Navigation Buttons */}
+      {/* Previous Button */}
       <button
         onClick={onPrev}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+        className="absolute left-4 text-white text-3xl z-50"
+        aria-label="Previous"
       >
-        <ChevronLeft className="h-6 w-6 text-white" />
+        <ChevronLeft />
       </button>
 
+      {/* Next Button */}
       <button
         onClick={onNext}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+        className="absolute right-4 text-white text-3xl z-50"
+        aria-label="Next"
       >
-        <ChevronRight className="h-6 w-6 text-white" />
+        <ChevronRight />
       </button>
 
-      {/* Media Content */}
-      <div className="max-w-4xl max-h-[90vh] mx-4">
-        {currentImage.type === "video" ? (
+      {/* Media Display */}
+      <div className="max-w-[90vw] max-h-[90vh]">
+        {item.type === "video" ? (
           <video
-            src={currentImage.src}
+            src={item.url}
             controls
-            controlsList="nodownload"
-            className="max-w-full max-h-full select-none"
-            draggable="false"
+            autoPlay
+            className="max-w-full max-h-full mx-auto"
           />
         ) : (
           <img
-            src={currentImage.src || "/placeholder.svg"}
-            alt={currentImage.title}
-            className="max-w-full max-h-full object-contain select-none pointer-events-none"
-            draggable="false"
+            src={item.url}
+            alt={item.title || "Media"}
+            className="max-w-full max-h-full mx-auto"
           />
         )}
-      </div>
-
-      {/* Image Info */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-white">
-        <h3 className="text-lg font-medium mb-1">{currentImage.title}</h3>
-        <p className="text-sm text-gray-300">
-          {currentIndex + 1} of {images.length}
-        </p>
       </div>
     </div>
   )

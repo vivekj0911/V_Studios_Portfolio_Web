@@ -46,7 +46,6 @@ const AboutSection = () => {
                 Whether it’s the joy of a wedding, the innocence of childhood, the elegance of a fashion shoot, or the precision of product photography – we bring every frame to life with creativity, clarity, and emotion.
               </p>
               <p>
-
                 Our commitment to quality, the use of modern equipment, and years of hands-on experience make us one of the trusted names in the field.
               </p>
               <p>

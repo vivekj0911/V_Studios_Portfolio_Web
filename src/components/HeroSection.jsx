@@ -29,7 +29,7 @@ const HeroSection = () => {
           <span className="block text-[#EADBC8] ">Beautiful Moments</span>
         </h1>
         <p className="text-xl md:text-2xl mb-8 text-gray-200 animate-slide-up">
-          Professional photographer based in Mumbai, specializing in weddings, portraits, and lifestyle photography
+          Professional photographer based in Raipur, specializing in weddings, portraits, and lifestyle photography
         </p>
         <button
           onClick={scrollToGallery}

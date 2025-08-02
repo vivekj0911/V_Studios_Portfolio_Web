@@ -50,7 +50,9 @@ export const uploadMedia = async (req, res) => {
 
 export const getAllMedia = async (req, res) => {
   try {
-    const mediaItems = await Media.find().sort({ uploadedAt: -1 });
+    const { category } = req.query;
+    const query = category && category !== "All" ? { category } : {};
+    const mediaItems = await Media.find(query).sort({ uploadedAt: -1 });
     res.status(200).json(mediaItems);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch media", error: err.message });
