@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import mediaRoutes from "./routes/mediaRoutes.js";
+import feedbackRoutes from "./routes/feedbackRoutes.js";
 dotenv.config();
 
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/api/media", mediaRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

@@ -27,6 +27,23 @@ const GalleryDetailPage = () => {
   }, [])
 
   useEffect(() => {
+  const incrementMediaViews = async () => {
+    if (lightboxIndex !== null && galleryData[lightboxIndex]) {
+      try {
+        const mediaId = galleryData[lightboxIndex]._id;
+        await fetch(`http://localhost:5000/api/media/${mediaId}/view`, {
+          method: "POST"
+        });
+      } catch (error) {
+        console.error("Failed to increment view count", error);
+      }
+    }
+  };
+
+  incrementMediaViews();
+}, [lightboxIndex]);
+
+  useEffect(() => {
     const fetchGallery = async () => {
       try {
         const query =

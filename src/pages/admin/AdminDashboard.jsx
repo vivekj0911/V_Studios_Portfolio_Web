@@ -4,6 +4,48 @@ import { Camera, Upload, ImageIcon, BarChart3 } from "lucide-react"
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [feedbacks, setFeedbacks] = useState([])
+  const [feedbackLoading, setFeedbackLoading] = useState(true)
+
+  const fetchFeedbacks = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/feedback", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      })
+      const data = await res.json()
+      setFeedbacks(data)
+    } catch (err) {
+      console.error("Failed to fetch feedbacks:", err)
+    } finally {
+      setFeedbackLoading(false)
+    }
+  }
+
+  const handleApprovalToggle = async (id, currentStatus) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/feedback/${id}/approve`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+        body: JSON.stringify({ isApproved: !currentStatus }),
+      })
+
+      const updated = await res.json()
+      setFeedbacks((prev) =>
+        prev.map((fb) => (fb._id === id ? updated.data : fb))
+      )
+    } catch (err) {
+      console.error("Failed to update approval:", err)
+    }
+  }
+
+  useEffect(() => {
+    fetchFeedbacks()
+  }, [])
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -89,13 +131,40 @@ const AdminDashboard = () => {
         )}
       </div>
 
-      {/* Placeholder for Recent Activity (optional future integration) */}
       <div className="bg-white rounded-xl shadow-sm border border-[#EADBC8]/30">
         <div className="p-6 border-b border-[#EADBC8]/30">
-          <h2 className="text-xl font-semibold text-[#102C57]">Recent Activity</h2>
+          <h2 className="text-xl font-semibold text-[#102C57]">Feedback Approval</h2>
         </div>
-        <div className="p-6 text-[#102C57]/60">
-          Coming soon: Upload logs, category edits, and view analytics.
+
+        <div className="p-6 space-y-4">
+          {feedbackLoading ? (
+            <p className="text-[#102C57]/60">Loading feedbacks...</p>
+          ) : feedbacks.length === 0 ? (
+            <p className="text-[#102C57]/60">No feedbacks submitted yet.</p>
+          ) : (
+            feedbacks.map((fb) => (
+              <div
+                key={fb._id}
+                className="border border-[#EADBC8]/30 p-4 rounded-lg flex justify-between items-start"
+              >
+                <div>
+                  <p className="font-semibold text-[#102C57]">{fb.name} ({fb.category})</p>
+                  <p className="text-[#102C57]/80 text-sm">⭐ {fb.rating}</p>
+                  <p className="text-[#102C57]/70 mt-1">{fb.message}</p>
+                  <p className="text-xs text-gray-400 mt-1">Submitted: {new Date(fb.createdAt).toLocaleDateString()}</p>
+                </div>
+                <button
+                  onClick={() => handleApprovalToggle(fb._id, fb.isApproved)}
+                  className={`text-sm px-4 py-2 rounded-md font-medium ${fb.isApproved
+                      ? "bg-red-100 text-red-700 hover:bg-red-200"
+                      : "bg-green-100 text-green-700 hover:bg-green-200"
+                    }`}
+                >
+                  {fb.isApproved ? "Reject" : "Approve"}
+                </button>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

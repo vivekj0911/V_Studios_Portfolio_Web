@@ -241,11 +241,7 @@ const GallerySection = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        .text-shadow-lg {
-          text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-      `}</style>
+     
     </section>
   )
 }

@@ -1,27 +1,32 @@
 import { Star, Quote } from "lucide-react"
+import { useState, useEffect } from "react"
 
-const testimonials = [
-  {
-    name: "Priya & Rohit",
-    text: "Arjun captured our wedding day perfectly. Every emotion, every detail - the photos are absolutely stunning and we treasure them forever.",
-    rating: 5,
-    event: "Wedding Photography",
-  },
-  {
-    name: "Kavya Sharma",
-    text: "Professional, creative, and incredibly talented. Arjun made our family portraits look amazing and the whole experience was wonderful.",
-    rating: 5,
-    event: "Family Portraits",
-  },
-  {
-    name: "Rajesh Kumar",
-    text: "The corporate headshots Arjun took are now our most valued business assets. He has an amazing eye for capturing professional moments.",
-    rating: 5,
-    event: "Corporate Photography",
-  },
-]
+
 
 const AboutSection = () => {
+  const [testimonials, setTestimonials] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/feedback/top3")
+        const data = await res.json()
+        if (Array.isArray(data)) {
+          setTestimonials(data)
+        } else {
+          console.error("Failed to fetch testimonials:", data)
+        }
+      } catch (err) {
+        console.error("Failed to fetch testimonials:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTestimonials()
+  }, [])
+
   return (
     <section id="about" className="py-20 bg-[#FEFAF6]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -63,28 +68,34 @@ const AboutSection = () => {
           <p className="text-xl text-[#102C57]/70">Trusted by couples, families, and businesses across Raipur</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
-              <Quote className="h-8 w-8 text-[#EADBC8] mb-4" />
-              <p className="text-[#102C57]/80 mb-4 italic">"{testimonial.text}"</p>
+        {loading ? (
+          <div className="text-center text-[#102C57]/70">Loading testimonials...</div>
+        ) : testimonials.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <Quote className="h-8 w-8 text-[#EADBC8] mb-4" />
+                <p className="text-[#102C57]/80 mb-4 italic">"{testimonial.message}"</p>
 
-              <div className="flex items-center mb-2">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                ))}
-              </div>
+                <div className="flex items-center mb-2">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                  ))}
+                </div>
 
-              <div>
-                <p className="font-semibold text-[#102C57]">{testimonial.name}</p>
-                <p className="text-sm text-[#102C57]/60">{testimonial.event}</p>
+                <div>
+                  <p className="font-semibold text-[#102C57]">{testimonial.name}</p>
+                  <p className="text-sm text-[#102C57]/60">{testimonial.category}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-[#102C57]/70">No testimonials available yet.</div>
+        )}
       </div>
     </section>
   )
