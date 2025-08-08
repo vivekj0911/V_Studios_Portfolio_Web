@@ -4,6 +4,8 @@ import { ArrowLeft, Play } from "lucide-react"
 import TermsModal from "../components/TermsModal"
 import Lightbox from "../components/Lightbox"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const GalleryDetailPage = () => {
   const [showTermsModal, setShowTermsModal] = useState(false)
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false)
@@ -31,7 +33,7 @@ const GalleryDetailPage = () => {
     if (lightboxIndex !== null && galleryData[lightboxIndex]) {
       try {
         const mediaId = galleryData[lightboxIndex]._id;
-        await fetch(`http://localhost:5000/api/media/${mediaId}/view`, {
+        await fetch(`${API_URL}/api/media/${mediaId}/view`, {
           method: "POST"
         });
       } catch (error) {
@@ -50,7 +52,7 @@ const GalleryDetailPage = () => {
           selectedCategory && selectedCategory !== "All"
             ? `?category=${encodeURIComponent(selectedCategory)}`
             : ""
-        const res = await fetch(`http://localhost:5000/api/media${query}`)
+        const res = await fetch(`${API_URL}/api/media${query}`)
         const data = await res.json()
         setGalleryData(data)
       } catch (err) {

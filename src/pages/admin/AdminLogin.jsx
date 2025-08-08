@@ -3,6 +3,8 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Camera, Eye, EyeOff } from "lucide-react"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -20,7 +22,7 @@ const AdminLogin = () => {
     setError(null)
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +85,7 @@ const AdminLogin = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-[#EADBC8] rounded-lg focus:ring-2 focus:ring-[#DAC0A3] focus:border-transparent transition-colors"
-                placeholder="admin@arjunmehta.photography"
+                placeholder="Enter your email address"
               />
             </div>
 

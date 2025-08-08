@@ -4,6 +4,8 @@ import { useState } from "react"
 import { MapPin, Phone, Mail, Instagram } from "lucide-react"
 import { FaWhatsapp } from "react-icons/fa"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const categories = [
   "Baby shoot",
   "Maternity shoot",
@@ -11,7 +13,8 @@ const categories = [
   "Corporate Photography",
   "Product Photography",
   "Collage photo frame design",
-  "Videos"
+  "Videos",
+  "Extras"
 ]
 
 const ContactSection = () => {
@@ -43,7 +46,7 @@ const ContactSection = () => {
     const newErrors = validateForm()
     if (Object.keys(newErrors).length > 0) return setErrors(newErrors)
 
-    const res = await fetch("http://localhost:5000/api/feedback", {
+    const res = await fetch(`${API_URL}/api/feedback`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)

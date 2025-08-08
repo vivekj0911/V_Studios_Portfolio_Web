@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Camera, Upload, ImageIcon, BarChart3 } from "lucide-react"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -9,7 +11,7 @@ const AdminDashboard = () => {
 
   const fetchFeedbacks = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/feedback", {
+      const res = await fetch(`${API_URL}/api/feedback`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
@@ -25,7 +27,7 @@ const AdminDashboard = () => {
 
   const handleApprovalToggle = async (id, currentStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/feedback/${id}/approve`, {
+      const res = await fetch(`${API_URL}/api/feedback/${id}/approve`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +52,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/media/stats", {
+        const res = await fetch(`${API_URL}/api/media/stats`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           },

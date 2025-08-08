@@ -1,7 +1,7 @@
 import { Star, Quote } from "lucide-react"
 import { useState, useEffect } from "react"
 
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 const AboutSection = () => {
   const [testimonials, setTestimonials] = useState([])
@@ -10,7 +10,7 @@ const AboutSection = () => {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/feedback/top3")
+        const res = await fetch(`${API_URL}/api/feedback/top3`)
         const data = await res.json()
         if (Array.isArray(data)) {
           setTestimonials(data)

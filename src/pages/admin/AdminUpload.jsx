@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { Upload, X, ImageIcon, Video } from "lucide-react"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const categories = [
   "Baby shoot",
   "Maternity shoot",
@@ -10,7 +12,8 @@ const categories = [
   "Corporate Photography",
   "Videos",
   "Product photography",
-  "Collage photo frame design"
+  "Collage photo frame design",
+  "Extras",
 ]
 
 const AdminUpload = () => {
@@ -52,7 +55,7 @@ const AdminUpload = () => {
         data.append("title", formData.title)
         data.append("category", formData.category)
 
-        const res = await fetch("http://localhost:5000/api/media/upload", {
+        const res = await fetch(`${API_URL}/api/media/upload`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,

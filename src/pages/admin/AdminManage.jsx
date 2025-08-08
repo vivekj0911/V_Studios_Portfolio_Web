@@ -5,6 +5,8 @@ import {
   Search, Filter, Trash2, ImageIcon, Video, Eye, X,
 } from "lucide-react"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const categories = [
   "All",
   "Baby shoot",
@@ -14,6 +16,7 @@ const categories = [
   "Videos",
   "Product photography",
   "Collage photo frame design",
+  "Extras",
 ]
 
 const AdminManage = () => {
@@ -34,7 +37,7 @@ const AdminManage = () => {
 
   const fetchMedia = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/media/")
+      const res = await fetch(`${API_URL}/api/media/`)
       const data = await res.json()
       setMedia(data)
     } catch (err) {
@@ -52,7 +55,7 @@ const AdminManage = () => {
   const confirmDelete = async () => {
     const token = localStorage.getItem("adminToken")
     try {
-      const res = await fetch(`http://localhost:5000/api/media/${selectedId}`, {
+      const res = await fetch(`${API_URL}/api/media/${selectedId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
