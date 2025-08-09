@@ -97,7 +97,7 @@ const ContactSection = () => {
                 <a href="https://www.instagram.com/vidhi_photo_?igsh=MWhuZXZjZzdhMXNlNw==" className="p-3 bg-[#EADBC8] rounded-full hover:bg-[#DAC0A3]">
                   <Instagram className="h-5 w-5 text-[#102C57]" />
                 </a>
-                <a href="https://wa.me/8770300818" className="p-3 bg-[#EADBC8] rounded-full hover:bg-[#DAC0A3]">
+                <a href="https://wa.me/+918770300818" className="p-3 bg-[#EADBC8] rounded-full hover:bg-[#DAC0A3]">
                   <FaWhatsapp className="h-5 w-5 text-[#102C57]" />
                 </a>
                 <a href="mailto:pramodvarsha7@gmail.com" className="p-3 bg-[#EADBC8] rounded-full hover:bg-[#DAC0A3]">

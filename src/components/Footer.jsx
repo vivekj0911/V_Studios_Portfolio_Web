@@ -19,7 +19,7 @@ const Footer = () => {
               <a href="https://www.instagram.com/vidhi_photo_?igsh=MWhuZXZjZzdhMXNlNw==" className="text-gray-400 hover:text-white transition-colors">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="https://wa.me/8770300818" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://wa.me/+918770300818" className="text-gray-400 hover:text-white transition-colors">
                 <FaWhatsapp className="h-5 w-5" />
               </a>
               <a href="mailto:pramodvarsha7@gmail.com" className="text-gray-400 hover:text-white transition-colors">
