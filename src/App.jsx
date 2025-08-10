@@ -10,32 +10,38 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUpload from './pages/admin/AdminUpload'
 import AdminManage from './pages/admin/AdminManage'
 
+import { Analytics } from '@vercel/analytics/react';
+
 function App() {
   return (
-    <Routes>
-      {/* Public-facing layout */}
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="gallery/:category" element={<GalleryDetailPage />} />
-      </Route>
+    <>
+      <Routes>
+        {/* Public-facing layout */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="gallery/:category" element={<GalleryDetailPage />} />
+        </Route>
 
-      {/* Admin Login (public) */}
-      <Route path="/admin/login" element={<AdminLogin />} />
+        {/* Admin Login (public) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
 
-      {/* Protected admin routes */}
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <AdminLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="upload" element={<AdminUpload />} />
-        <Route path="manage" element={<AdminManage />} />
-      </Route>
-    </Routes>
+        {/* Protected admin routes */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="upload" element={<AdminUpload />} />
+          <Route path="manage" element={<AdminManage />} />
+        </Route>
+      </Routes>
+      {/* Vercel Analytics */}
+      <Analytics />
+    </>
   )
 }
 
