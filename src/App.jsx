@@ -11,6 +11,7 @@ import AdminUpload from './pages/admin/AdminUpload'
 import AdminManage from './pages/admin/AdminManage'
 
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
       </Routes>
       {/* Vercel Analytics */}
       <Analytics />
+      <SpeedInsights />
     </>
   )
 }
