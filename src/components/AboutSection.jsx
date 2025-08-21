@@ -1,5 +1,5 @@
 // src/components/AboutSection.jsx
-import { Star, Quote, Camera, Award, Users, TrendingUp, Heart, Eye } from "lucide-react"
+import { Star, Quote, Camera, Award, TrendingUp, Heart } from "lucide-react"
 import { useState, useEffect, useCallback, useMemo, memo } from "react"
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -29,10 +29,10 @@ SkeletonCard.displayName = 'SkeletonCard'
 const StatCard = memo(({ stat, index, isVisible }) => {
   const [count, setCount] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
-  
+
   const IconComponent = stat.icon
   const targetValue = parseInt(stat.value.replace(/\D/g, ''))
-  
+
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
@@ -40,7 +40,7 @@ const StatCard = memo(({ stat, index, isVisible }) => {
         const steps = 60
         const increment = targetValue / steps
         let current = 0
-        
+
         const counter = setInterval(() => {
           current += increment
           if (current >= targetValue) {
@@ -50,16 +50,16 @@ const StatCard = memo(({ stat, index, isVisible }) => {
             setCount(Math.floor(current))
           }
         }, duration / steps)
-        
+
         return () => clearInterval(counter)
       }, index * 200)
-      
+
       return () => clearTimeout(timer)
     }
   }, [isVisible, targetValue, index])
-  
+
   return (
-    <div 
+    <div
       className="group relative bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[#EADBC8]/30 hover:shadow-xl hover:border-[#DAC0A3]/50 transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 cursor-pointer overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -67,39 +67,34 @@ const StatCard = memo(({ stat, index, isVisible }) => {
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#DAC0A3]/10 to-transparent rounded-full transform translate-x-8 -translate-y-8 group-hover:scale-150 transition-transform duration-500"></div>
       <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-[#EADBC8]/10 to-transparent rounded-full transform -translate-x-4 translate-y-4 group-hover:scale-150 transition-transform duration-500"></div>
-      
+
       {/* Content */}
       <div className="relative z-10 text-center">
-        <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 transition-all duration-500 ${
-          isHovered 
-            ? "bg-gradient-to-r from-[#102C57] to-[#1a3a6b] scale-110 rotate-12" 
+        <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 transition-all duration-500 ${isHovered
+            ? "bg-gradient-to-r from-[#102C57] to-[#1a3a6b] scale-110 rotate-12"
             : "bg-gradient-to-r from-[#DAC0A3] to-[#EADBC8]"
-        }`}>
-          <IconComponent className={`w-8 h-8 transition-colors duration-300 ${
-            isHovered ? "text-white" : "text-[#102C57]"
-          }`} />
-        </div>
-        
-        <div className="space-y-2">
-          <div className={`font-bold text-3xl lg:text-4xl transition-all duration-300 ${
-            isHovered 
-              ? "text-transparent bg-clip-text bg-gradient-to-r from-[#102C57] to-[#DAC0A3] scale-110" 
-              : "text-[#102C57]"
           }`}>
+          <IconComponent className={`w-8 h-8 transition-colors duration-300 ${isHovered ? "text-white" : "text-[#102C57]"
+            }`} />
+        </div>
+
+        <div className="space-y-2">
+          <div className={`font-bold text-3xl lg:text-4xl transition-all duration-300 ${isHovered
+              ? "text-transparent bg-clip-text bg-gradient-to-r from-[#102C57] to-[#DAC0A3] scale-110"
+              : "text-[#102C57]"
+            }`}>
             {count}{stat.value.replace(/\d/g, '').replace(/\+/g, '')}+
           </div>
-          
-          <div className={`text-sm lg:text-base font-semibold transition-colors duration-300 ${
-            isHovered ? "text-[#102C57]" : "text-[#102C57]/70"
-          }`}>
+
+          <div className={`text-sm lg:text-base font-semibold transition-colors duration-300 ${isHovered ? "text-[#102C57]" : "text-[#102C57]/70"
+            }`}>
             {stat.label}
           </div>
         </div>
-        
+
         {/* Hover effect indicator */}
-        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-[#102C57]/5 to-[#DAC0A3]/5 transition-opacity duration-300 ${
-          isHovered ? "opacity-100" : "opacity-0"
-        }`}></div>
+        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-[#102C57]/5 to-[#DAC0A3]/5 transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"
+          }`}></div>
       </div>
     </div>
   )
@@ -111,13 +106,12 @@ StatCard.displayName = 'StatCard'
 const TestimonialCard = memo(({ testimonial, index }) => {
   const stars = useMemo(() => {
     return [...Array(5)].map((_, i) => (
-      <Star 
-        key={i} 
-        className={`h-4 w-4 transition-colors duration-200 ${
-          i < testimonial.rating 
-            ? "text-yellow-400 fill-current" 
+      <Star
+        key={i}
+        className={`h-4 w-4 transition-colors duration-200 ${i < testimonial.rating
+            ? "text-yellow-400 fill-current"
             : "text-gray-300"
-        }`} 
+          }`}
       />
     ))
   }, [testimonial.rating])
@@ -125,10 +119,10 @@ const TestimonialCard = memo(({ testimonial, index }) => {
   return (
     <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[#EADBC8]/20 hover:shadow-xl hover:border-[#EADBC8]/40 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-[#EADBC8]/10 to-transparent rounded-full transform translate-x-8 -translate-y-8"></div>
-      
+
       <div className="relative z-10">
         <Quote className="h-8 w-8 text-[#DAC0A3] mb-4 group-hover:scale-110 transition-transform duration-300" />
-        
+
         <p className="text-[#102C57]/80 mb-6 italic leading-relaxed text-sm">
           "{testimonial.message}"
         </p>
@@ -165,18 +159,22 @@ const AboutSection = () => {
     { icon: TrendingUp, value: "50+", label: "Events Covered" }
   ], [])
 
-  const fetchTestimonials = useCallback(async () => {
+  const fetchTestimonials = useCallback(async (skipTimeout = fals) => {
     try {
       setError(null)
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 8000)
+      let timeoutId
+
+      if (!skipTimeout) {
+        timeoutId = setTimeout(() => controller.abort(), 15000)
+      }
 
       const res = await fetch(`${API_URL}/api/feedback/top3`, {
         signal: controller.signal,
         headers: { 'Accept': 'application/json' }
       })
 
-      clearTimeout(timeoutId)
+      if (timeoutId) clearTimeout(timeoutId)
 
       if (!res.ok) {
         throw new Error(`Failed to fetch testimonials: ${res.status} ${res.statusText}`)
@@ -201,7 +199,7 @@ const AboutSection = () => {
   }, [])
 
   useEffect(() => {
-    fetchTestimonials()
+    fetchTestimonials(true)
   }, [fetchTestimonials])
 
   // Intersection observer for stats animation
@@ -251,7 +249,7 @@ const AboutSection = () => {
                   loading="lazy"
                 />
               </picture>
-              
+
               {/* Floating badge */}
               <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#102C57] to-[#1a3a6b] text-white px-4 py-2 rounded-full shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-500">
                 <div className="flex items-center space-x-2">
@@ -296,13 +294,13 @@ const AboutSection = () => {
             <p className="text-xl text-[#102C57]/70">Numbers that speak for our dedication</p>
             <div className="h-1 w-16 bg-gradient-to-r from-[#DAC0A3] to-[#EADBC8] rounded-full mx-auto mt-4"></div>
           </div>
-          
+
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {stats.map((stat, index) => (
-              <StatCard 
-                key={index} 
-                stat={stat} 
-                index={index} 
+              <StatCard
+                key={index}
+                stat={stat}
+                index={index}
                 isVisible={statsVisible}
               />
             ))}

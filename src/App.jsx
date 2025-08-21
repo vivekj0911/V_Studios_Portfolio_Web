@@ -1,17 +1,20 @@
 import { Routes, Route } from 'react-router-dom'
+import { Suspense, lazy } from 'react'
 import Layout from './components/Layout'
 import AdminLayout from './components/AdminLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 
 import Home from './pages/Home'
 import GalleryDetailPage from './pages/GalleryDetailPage'
-import AdminLogin from './pages/admin/AdminLogin'
-import AdminDashboard from './pages/admin/AdminDashboard'
-import AdminUpload from './pages/admin/AdminUpload'
-import AdminManage from './pages/admin/AdminManage'
 
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
+
+// ✅ Lazy load admin pages
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'))
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
+const AdminUpload = lazy(() => import('./pages/admin/AdminUpload'))
+const AdminManage = lazy(() => import('./pages/admin/AdminManage'))
 
 function App() {
   return (
@@ -23,10 +26,17 @@ function App() {
           <Route path="gallery/:category" element={<GalleryDetailPage />} />
         </Route>
 
-        {/* Admin Login (public) */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+        {/* Admin Login (lazy) */}
+        <Route
+          path="/admin/login"
+          element={
+            <Suspense fallback={<div className="p-6 text-center">Loading...</div>}>
+              <AdminLogin />
+            </Suspense>
+          }
+        />
 
-        {/* Protected admin routes */}
+        {/* Protected admin routes (lazy) */}
         <Route
           path="/admin"
           element={
@@ -35,11 +45,33 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="upload" element={<AdminUpload />} />
-          <Route path="manage" element={<AdminManage />} />
+          <Route
+            path="dashboard"
+            element={
+              <Suspense fallback={<div className="p-6 text-center">Loading...</div>}>
+                <AdminDashboard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="upload"
+            element={
+              <Suspense fallback={<div className="p-6 text-center">Loading...</div>}>
+                <AdminUpload />
+              </Suspense>
+            }
+          />
+          <Route
+            path="manage"
+            element={
+              <Suspense fallback={<div className="p-6 text-center">Loading...</div>}>
+                <AdminManage />
+              </Suspense>
+            }
+          />
         </Route>
       </Routes>
+
       {/* Vercel Analytics */}
       <Analytics />
       <SpeedInsights />
