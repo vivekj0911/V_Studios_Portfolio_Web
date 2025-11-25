@@ -60,7 +60,7 @@ const StatCard = memo(({ stat, index, isVisible }) => {
 
   return (
     <div
-      className="group relative bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[#EADBC8]/30 hover:shadow-xl hover:border-[#DAC0A3]/50 transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 cursor-pointer overflow-hidden"
+      className="group relative bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-[#EADBC8]/30 hover:shadow-xl hover:border-[#DAC0A3]/50 transition-all duration-500 transform hover:-translate-y-3 hover:scale-105  overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -234,53 +234,84 @@ const AboutSection = () => {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-[#DAC0A3]/10 to-transparent rounded-full transform translate-x-48 translate-y-48"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* About Content - Better Layout Balance */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center mb-20">
-          {/* Profile Photo - Better Sized Container */}
-          <div className="lg:col-span-2 relative group">
-            <div className="absolute -inset-6 bg-gradient-to-r from-[#DAC0A3]/20 to-[#EADBC8]/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-            <div className="relative max-w-md mx-auto">
-              <picture>
-                <source srcSet="/Profile.webp" type="image/webp" />
-                <img
-                  src="/Profile.JPG"
-                  alt="Pramod Dhamgaye - Professional Photographer with 20+ years experience"
-                  className="rounded-2xl aspect-[4/5] shadow-2xl w-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-              </picture>
+        {/* About Content - Two-Part Layout */}
+        <div className="space-y-12 mb-20">
+          {/* First Row: Image + First Half of Text */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+            {/* Profile Photo - Scaled Down & Professional */}
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-[#DAC0A3]/20 to-[#EADBC8]/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+              <div className="relative max-w-sm mx-auto">
+                <picture>
+                  <source srcSet="/Profile.webp" type="image/webp" />
+                  <img
+                    src="/Profile.JPG"
+                    alt="Pramod Dhamgaye - Professional Photographer with 20+ years experience"
+                    className="rounded-2xl aspect-[3/4] shadow-2xl w-full object-cover transform group-hover:scale-[1.02] transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </picture>
 
-              {/* Floating badge */}
-              <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#102C57] to-[#1a3a6b] text-white px-4 py-2 rounded-full shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-500">
-                <div className="flex items-center space-x-2">
-                  <Camera className="h-4 w-4" />
-                  <span className="text-sm font-bold">20+ Years</span>
+                {/* Floating badge */}
+                <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-[#102C57] to-[#1a3a6b] text-white px-5 py-3 rounded-2xl shadow-xl transform group-hover:scale-105 transition-transform duration-500">
+                  <div className="flex items-center space-x-2">
+                    <Camera className="h-5 w-5" />
+                    <span className="text-sm font-bold">20+ Years</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* About Content - Expanded Space */}
-          <div className="lg:col-span-3 space-y-8">
-            <div>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#102C57] mb-6 leading-tight">
-                About Us – <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#102C57] to-[#DAC0A3]">Vidhi Digitals</span>
-              </h2>
-              <div className="h-1.5 w-24 bg-gradient-to-r from-[#DAC0A3] to-[#EADBC8] rounded-full"></div>
-            </div>
+            {/* First Half of Content */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-4xl md:text-5xl font-bold text-[#102C57] mb-4 leading-tight">
+                  About Us
+                </h2>
+                <h3 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#102C57] to-[#DAC0A3] mb-6">
+                  Vidhi Digitals
+                </h3>
+                <div className="h-1.5 w-20 bg-gradient-to-r from-[#DAC0A3] to-[#EADBC8] rounded-full"></div>
+              </div>
 
-            <div className="space-y-6 text-lg lg:text-xl text-[#102C57]/80 leading-relaxed">
-              <p>
-                <strong className="text-[#102C57] text-xl lg:text-2xl">Capturing Emotions for Over 20 Years</strong><br />
-                At Vidhi Digital, photography is not just our profession – it's our passion. With over two decades of experience in the art of photography, we have been turning precious moments into timeless memories since the very beginning.
-              </p>
-              <p>
+              <div className="bg-gradient-to-r from-[#EADBC8]/10 to-transparent p-6 rounded-xl border-l-4 border-[#DAC0A3]">
+                <h4 className="text-2xl md:text-3xl font-bold text-[#102C57] mb-4">
+                  Capturing Emotions for Over 20 Years
+                </h4>
+                <p className="text-lg md:text-xl text-[#102C57]/85 leading-relaxed">
+                  At Vidhi Digital, photography is not just our profession – it's our passion. With over two decades of experience in the art of photography, we have been turning precious moments into timeless memories since the very beginning.
+                </p>
+              </div>
+
+              <p className="text-lg md:text-xl text-[#102C57]/85 leading-relaxed">
                 Whether it's the joy of a wedding, the innocence of childhood, the elegance of a fashion shoot, or the precision of product photography – we bring every frame to life with creativity, clarity, and emotion.
               </p>
-              <p>
-                <em className="text-[#DAC0A3] font-semibold text-xl">Every photo we take tells a story — your story.</em><br />
+            </div>
+          </div>
+
+          {/* Second Row: Remaining Content - Full Width */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-[#102C57]/5 to-[#DAC0A3]/5 p-8 rounded-xl border border-[#EADBC8]/30">
+              <p className="text-xl md:text-2xl font-semibold text-[#102C57] italic mb-4">
+                "Every photo we take tells a story — your story."
+              </p>
+              <p className="text-lg md:text-xl text-[#102C57]/80 leading-relaxed">
                 If you're looking for a photography partner who understands the value of your special moments, Vidhi Digital is here for you.
               </p>
+            </div>
+
+            {/* Key Features */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="bg-white/60 backdrop-blur-sm p-6 rounded-xl shadow-md border border-[#EADBC8]/30 hover:shadow-lg transition-shadow duration-300">
+                <Award className="h-10 w-10 text-[#DAC0A3] mb-4" />
+                <p className="font-bold text-xl text-[#102C57] mb-2">Award Winning</p>
+                <p className="text-base text-[#102C57]/70">Excellence in Photography</p>
+              </div>
+              <div className="bg-white/60 backdrop-blur-sm p-6 rounded-xl shadow-md border border-[#EADBC8]/30 hover:shadow-lg transition-shadow duration-300">
+                <Heart className="h-10 w-10 text-[#DAC0A3] mb-4" />
+                <p className="font-bold text-xl text-[#102C57] mb-2">Client Focused</p>
+                <p className="text-base text-[#102C57]/70">Your Vision, Our Mission</p>
+              </div>
             </div>
           </div>
         </div>

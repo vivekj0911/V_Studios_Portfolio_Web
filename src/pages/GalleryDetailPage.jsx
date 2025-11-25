@@ -8,8 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const API_URL = import.meta.env.VITE_API_URL;
 
 // Configuration constants
-const BATCH_SIZE = 12;
-const BATCH_DELAY = 200;
 const INITIAL_SKELETON_COUNT = 8;
 
 // Utility to optimize Cloudinary images
@@ -49,7 +47,6 @@ const useGalleryData = (selectedCategory, hasAcceptedTerms) => {
 
   useEffect(() => {
     let mounted = true;
-    let batchInterval = null;
 
     const fetchGallery = async () => {
       if (!hasAcceptedTerms) return;
@@ -72,26 +69,9 @@ const useGalleryData = (selectedCategory, hasAcceptedTerms) => {
 
         if (!mounted) return;
 
-        if (Array.isArray(data) && data.length > 0) {
-          // Start with first batch
-          setGalleryData(data.slice(0, BATCH_SIZE));
-
-          // Progressive loading for remaining items
-          let index = BATCH_SIZE;
-          if (data.length > BATCH_SIZE) {
-            batchInterval = setInterval(() => {
-              if (!mounted || index >= data.length) {
-                clearInterval(batchInterval);
-                return;
-              }
-
-              setGalleryData(prev => [
-                ...prev,
-                ...data.slice(index, index + BATCH_SIZE)
-              ]);
-              index += BATCH_SIZE;
-            }, BATCH_DELAY);
-          }
+        // Load all images at once - no progressive loading
+        if (Array.isArray(data)) {
+          setGalleryData(data);
         } else {
           setGalleryData([]);
         }
@@ -112,9 +92,6 @@ const useGalleryData = (selectedCategory, hasAcceptedTerms) => {
 
     return () => {
       mounted = false;
-      if (batchInterval) {
-        clearInterval(batchInterval);
-      }
     };
   }, [selectedCategory, hasAcceptedTerms]);
 
@@ -219,7 +196,7 @@ const GalleryDetailPage = () => {
   // Custom hooks
   const { showTermsModal, hasAcceptedTerms, handleAcceptTerms } = useTermsAcceptance();
   const { galleryData, loading, error } = useGalleryData(selectedCategory, hasAcceptedTerms);
-  const { imageLoaded, handleImageLoad } = useImageLoading();
+  const { handleImageLoad } = useImageLoading();
 
   // Event handlers
   const handleContextMenu = useCallback((e) => e.preventDefault(), []);
@@ -281,6 +258,13 @@ const GalleryDetailPage = () => {
             | {selectedCategory} Gallery
           </span>
         </nav>
+        
+        {/* Image Count */}
+        {!loading && !error && galleryData.length > 0 && (
+          <div className="mt-4 text-[#102C57]/70 text-sm font-medium">
+            Showing {galleryData.length} {galleryData.length === 1 ? 'item' : 'items'}
+          </div>
+        )}
       </header>
 
       {/* Main Content */}

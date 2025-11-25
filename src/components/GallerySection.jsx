@@ -116,7 +116,7 @@ const CategoryCard = memo(({ category, loadedImages, onNavigate, onImageLoad }) 
   return (
     <div
       ref={cardRef}
-      className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transition-all duration-500 transform hover:-translate-y-3 will-change-transform focus:outline-none focus:ring-2 focus:ring-[#DAC0A3] focus:ring-offset-2"
+      className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transition-all duration-500 transform hover:-translate-y-3 will-change-transform focus:outline-none focus:ring-2 focus:ring-[#DAC0A3] focus:ring-offset-2 bg-gray-100"
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -125,34 +125,32 @@ const CategoryCard = memo(({ category, loadedImages, onNavigate, onImageLoad }) 
       onKeyDown={handleKeyDown}
       aria-label={`View ${category.title} gallery`}
     >
-      <div className="aspect-[4/3] relative overflow-hidden">
-        {/* Enhanced Shimmer Loading */}
-        {!loadedImages[category.id] && <ShimmerPlaceholder />}
-        
-        <img
-          src={loadedImages[category.id] ? category.image : category.thumb}
-          alt={`${category.title} - Professional photography showcase`}
-          loading="lazy"
-          decoding="async"
-          className={`w-full h-full object-cover transition-all duration-700 ${
-            loadedImages[category.id] ? "opacity-100" : "opacity-0"
-          } ${isHovered ? "scale-110" : "scale-100"}`}
-        />
-        
-        {/* Enhanced Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-85 transition-opacity duration-300" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#102C57]/10 to-[#DAC0A3]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
-        {/* Loading indicator */}
-        {!loadedImages[category.id] && (
-          <div className="absolute top-4 right-4">
-            <div className="w-6 h-6 border-2 border-white/20 border-t-white/80 rounded-full animate-spin"></div>
-          </div>
-        )}
-      </div>
+      {/* Enhanced Shimmer Loading */}
+      {!loadedImages[category.id] && <ShimmerPlaceholder />}
+      
+      <img
+        src={loadedImages[category.id] ? category.image : category.thumb}
+        alt={`${category.title} - Professional photography showcase`}
+        loading="lazy"
+        decoding="async"
+        className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-700 ${
+          loadedImages[category.id] ? "opacity-100" : "opacity-0"
+        } ${isHovered ? "scale-110" : "scale-100"}`}
+      />
+      
+      {/* Enhanced Gradient Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-85 transition-opacity duration-300" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#102C57]/10 to-[#DAC0A3]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
+      {/* Loading indicator */}
+      {!loadedImages[category.id] && (
+        <div className="absolute top-4 right-4 z-10">
+          <div className="w-6 h-6 border-2 border-white/20 border-t-white/80 rounded-full animate-spin"></div>
+        </div>
+      )}
       
       {/* Enhanced Content with Better Typography */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+      <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 z-10">
         <h3 className="text-xl lg:text-2xl font-bold mb-3 text-white drop-shadow-lg tracking-wide">
           {category.title}
         </h3>
